@@ -1,5 +1,7 @@
 package com.sbs.qna_service;
 
+import com.sbs.qna_service.boundedContext.answer.Answer;
+import com.sbs.qna_service.boundedContext.answer.AnswerRepository;
 import com.sbs.qna_service.boundedContext.question.Question;
 import com.sbs.qna_service.boundedContext.question.QuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +23,9 @@ class QnaServiceApplicationTests {
 	@Autowired // 필드 주입
 	private QuestionRepository questionRepository;
 
+	@Autowired // 필드 주입
+	private AnswerRepository answerRepository;
+
 	@BeforeEach // 테스트 케이스 실행 전에 딱 한번 실행
 	void beforeEach() {
 		// 모든 데이터 삭제
@@ -28,6 +33,9 @@ class QnaServiceApplicationTests {
 
 		// 흔적 삭제(다음 INSERT 때 Id가 1부터 시작하도록)
 		questionRepository.clearAutoIncrement();
+
+		// 모든 데이터 삭제
+		answerRepository.deleteAll();
 
 		Question q1 = new Question();
 		q1.setSubject("sbb가 무엇인가요?");
@@ -130,6 +138,31 @@ class QnaServiceApplicationTests {
 		Question q = oq.get();
 		questionRepository.delete(q);
 		assertEquals(1, questionRepository.count());
+	}
+
+	// SQL : SELECT FROM question WHERE id = ?;
+	// SQL : INSERT INTO answer SET create_date = NOW(), content = ?, question_id = ?;
+	@Test
+	@DisplayName("답변 데이터 생성 후 저장")
+	void t009() {
+		Optional<Question> oq = questionRepository.findById(2);
+		assertTrue(oq.isPresent());
+		Question q = oq.get();
+
+		/*
+			// v1
+			 Optional<Question> oq = questionRepository.findById(2);
+			 Question q = oq.get();
+
+			 // v2
+			 Question q = questionRepository.findById(2).orElse(null);
+		*/
+
+		Answer a = new Answer();
+		a.setContent("네 자동으로 생성됩니다.");
+		a.setQuestion(q);  // 어떤 질문의 답변인지 알기위해서 Question 객체가 필요하다.
+		a.setCreateDate(LocalDateTime.now());
+		answerRepository.save(a);
 	}
 
 }
