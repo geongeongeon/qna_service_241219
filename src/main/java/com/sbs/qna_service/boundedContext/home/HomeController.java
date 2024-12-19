@@ -12,5 +12,5 @@ public class HomeController {
     public String showHome() {
         return "홈";
     }
-    
+
 }

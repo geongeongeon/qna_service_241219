@@ -1,5 +1,28 @@
 spring:
+  profiles:
+    active: dev # 기본적으로 dev 환경임을 명시
   output:
     ansi:
-      enabled: always
+      enabled: always # 콘솔 색상 변경
+  thymeleaf:
+    cache: false # 타임리프 캐시 끄기
+    prefix: file:src/main/resources/templates/ # 타임리프 캐시 끄기(이 설정을 해야 꺼짐)
+    devtools:
+      livereload:
+        enabled: true
+      restart:
+        enabled: true
+  datasource:
+    url: jdbc:mariadb://127.0.0.1:3306/qna_service?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
+    username: root
+    password:
+    driver-class-name: org.mariadb.jdbc.Driver
 
+  jpa:
+    hibernate:
+      ddl-auto: update # 옵션: none, validate, update, create, create-drop
+    properties:
+      hibernate:
+        show_sql: true # 실행되는 SQL 쿼리 확인
+        format_sql: true # 출력되는 SQL을 포맷팅
+        use_sql_comments: true
