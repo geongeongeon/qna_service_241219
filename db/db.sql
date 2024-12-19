@@ -2,3 +2,8 @@
 DROP DATABASE IF EXISTS qna_service;
 CREATE DATABASE qna_service;
 USE qna_service;
+
+SHOW tables;
+
+DESC question;
+DESC answer;
