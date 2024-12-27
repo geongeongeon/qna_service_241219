@@ -52,11 +52,14 @@ class QnaServiceApplicationTests {
 		q2.setCreateDate(LocalDateTime.now());
 		questionRepository.save(q2);  // 두번째 질문 저장
 
+		// 답변 1개 생성하기
 		Answer a1 = new Answer();
 		a1.setContent("네 자동으로 생성됩니다.");
 		a1.setQuestion(q2);  // 어떤 질문의 답변인지 알기위해서 Question 객체가 필요하다.
 		a1.setCreateDate(LocalDateTime.now());
 		answerRepository.save(a1);
+
+		q2.getAnswerList().add(a1);
 	}
 
 	@Test
