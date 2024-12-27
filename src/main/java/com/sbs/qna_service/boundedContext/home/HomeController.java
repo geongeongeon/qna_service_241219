@@ -13,4 +13,10 @@ public class HomeController {
         return "홈";
     }
 
+    @GetMapping("/")
+    public String root() {
+        // redirect: 302
+        // 302는 '이 경로를 찾아가보세요.'라고 응답
+        return "redirect:/question/list";
+    }
 }
