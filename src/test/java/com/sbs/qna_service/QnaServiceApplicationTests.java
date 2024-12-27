@@ -186,6 +186,7 @@ class QnaServiceApplicationTests {
 		assertEquals(2, a.getQuestion().getId());
 	}
 
+	// EAGER을 사용할 경우, SQL : SELECT Q.*, A.* FROM question AS Q LEFT JOIN answer AS A ON Q.id = A.question_id WHERE Q.id = ?;
 	@Transactional // 메서드 내에서 트랜잭션이 유지된다.
 	// 테스트 코드에서는 Transactional을 붙여줘야 한다.
 	// findById 메서드를 실행하고 나면 DB 연결이 끊어진다.
