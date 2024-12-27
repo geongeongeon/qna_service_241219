@@ -14,8 +14,12 @@
     <tbody>
     <tr th:each="q : ${questionList}">
         <td th:text="${q.id}"></td>
-        <td th:text="${q.subject}"></td>
-        <td th:text="${q.createDate}"></td>
+        <td>
+            <a th:href="@{|/question/detail/${q.id}|}" th:text="${q.subject}"></a>
+        </td>
+        <td>
+            <a th:href="@{|/question/detail/${q.createDate}|}" th:text="${q.createDate}"></a>
+        </td>
     </tr>
     </tbody>
 </table>
