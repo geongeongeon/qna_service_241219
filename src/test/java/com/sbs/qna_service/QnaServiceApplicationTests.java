@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -193,6 +194,7 @@ class QnaServiceApplicationTests {
 	// Transactional 어노테이션을 사용하면 메서드가 종료될 때까지 DB 연결이 유지된다.
 	@Test
 	@DisplayName("질문을 통해 답변 찾기")
+	@Rollback(false) // 테서트 메서드가 끝난 후에도 트랜잭션이 롤백되지 않고 커밋된다.
 	void t011() {
 		// SQL : SELECT * FROM question WHERE id = 2;
 		Optional<Question> oq = questionRepository.findById(2);
