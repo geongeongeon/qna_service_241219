@@ -186,7 +186,8 @@ class QnaServiceApplicationTests {
 		assertEquals(2, a.getQuestion().getId());
 	}
 
-	@Transactional // 테스트 코드에서는 Transactional을 붙여줘야 한다.
+	@Transactional // 메서드 내에서 트랜잭션이 유지된다.
+	// 테스트 코드에서는 Transactional을 붙여줘야 한다.
 	// findById 메서드를 실행하고 나면 DB 연결이 끊어진다.
 	// Transactional 어노테이션을 사용하면 메서드가 종료될 때까지 DB 연결이 유지된다.
 	@Test
@@ -196,8 +197,10 @@ class QnaServiceApplicationTests {
 		Optional<Question> oq = questionRepository.findById(2);
 		assertTrue(oq.isPresent());
 		Question q = oq.get();
+		// 테스트 환경에서는 get으로 데이터를 가져온 뒤 DB 연결을 끊는다.
 
-		List<Answer> answerList = q.getAnswerList();
+		// SQL : SELECT * FROM answer WHERE question_id = 2;
+		List<Answer> answerList = q.getAnswerList(); // DB와 통신이 끊긴 뒤 answer을 가져옴 => 실패
 
 		assertEquals(1, answerList.size());
 		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
