@@ -24,6 +24,10 @@ public class QuestionController {
 
     @GetMapping("/question/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id) {
+        Question question = questionService.getQuestion(id);
+
+        model.addAttribute("question", question);
+
         return "question_detail";
     }
 }
