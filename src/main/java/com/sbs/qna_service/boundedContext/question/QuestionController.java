@@ -1,5 +1,6 @@
 package com.sbs.qna_service.boundedContext.question;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,27 +41,11 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String questionCreate(QuestionForm questionForm) {
-        String subject = questionForm.getSubject();
-        String content = questionForm.getContent();
-        
-        if (subject == null || subject.trim().isEmpty()) {
-            throw new RuntimeException("subject(을)를 입력해주세요.");
-        }
+    public String questionCreate(@Valid QuestionForm questionForm) {
+        // @Valid QuestionForm questionForm
+        // questionForm 값을 바인딩 할 때 유효성 체크를 해라!
 
-        if (subject.trim().length() > 200) {
-            throw new RuntimeException("subject(을)를 200자 이하로 입력해주세요.");
-        }
-
-        if (content == null || content.trim().isEmpty()) {
-            throw new RuntimeException("subject(을)를 입력해주세요.");
-        }
-
-        if (content.trim().length() > 20000) {
-            throw new RuntimeException("subject(을)를 20,000자 이하로 입력해주세요.");
-        }
-
-        questionService.create(subject, content);
+        questionService.create(questionForm.getSubject(), questionForm.getContent());
 
         return "redirect:/question/list"; // 질문 저장 후 질문 목록으로 이동
     }
