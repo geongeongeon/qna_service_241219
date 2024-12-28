@@ -40,7 +40,10 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    public String questionCreate(String subject, String content) {
+    public String questionCreate(QuestionForm questionForm) {
+        String subject = questionForm.getSubject();
+        String content = questionForm.getContent();
+        
         if (subject == null || subject.trim().isEmpty()) {
             throw new RuntimeException("subject(을)를 입력해주세요.");
         }
