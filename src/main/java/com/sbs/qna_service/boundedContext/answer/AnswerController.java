@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/answer")
 public class AnswerController {
     private final QuestionService questionService;
+    private final AnswerService answerService;
 
     @PostMapping("/create/{id}")
     // @ResponseBody
@@ -19,7 +20,7 @@ public class AnswerController {
         Question question = questionService.getQuestion(id);
 
         // TODO: 답변을 저장한다.
-        Answer answer = questionService.create(question, content);
+        Answer answer = answerService.create(question, content);
 
         // return "%d번 질문에 대한 답변이 생성되었습니다.(답변 번호 : %d)".formatted(id, answer.getId());
         return "redirect:/question/detail/%s".formatted(id);

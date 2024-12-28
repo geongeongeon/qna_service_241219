@@ -1,6 +1,5 @@
 package com.sbs.qna_service.boundedContext.question;
 
-import com.sbs.qna_service.boundedContext.answer.Answer;
 import com.sbs.qna_service.boundedContext.answer.AnswerRepository;
 import com.sbs.qna_service.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +27,13 @@ public class QuestionService {
         return oq.get();
     }
 
-    public Answer create(Question question, String content) {
-        Answer answer = new Answer();
-        answer.setContent(content);
-        answer.setCreateDate(LocalDateTime.now());
-        answer.setQuestion(question);
-        answerRepository.save(answer);
+    public Question create(String subject, String content) {
+        Question q = new Question();
+        q.setSubject(subject);
+        q.setContent(content);
+        q.setCreateDate(LocalDateTime.now());
+        questionRepository.save(q);
 
-        return answer;
+        return q;
     }
 }
