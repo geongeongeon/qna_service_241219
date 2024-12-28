@@ -6,7 +6,7 @@
 <h1 th:text="${question.subject}"></h1>
 <div th:text="${question.content}"></div>
 
-<form th:action="@{|/answer/create/${question.id}|}" action="POST">
+<form th:action="@{|/answer/create/${question.id}|}" method="POST">
     <textarea name="content" id="content" rows="15"></textarea>
     <input type="submit" value="답변등록">
 </form>
