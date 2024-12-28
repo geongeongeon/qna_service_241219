@@ -1,4 +1,6 @@
-<div class="container my-3">
+<html layout:decorate="~{layout}"> <!-- ~{layout} : 부모 레이아웃 -->
+
+<div layout:fragment="content" class="container my-3">
     <table class="table">
         <thead class="table-dark">
         <tr>
@@ -20,3 +22,5 @@
         </tbody>
     </table>
 </div>
+
+</html>
