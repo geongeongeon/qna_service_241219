@@ -59,7 +59,8 @@
         <tbody>
         <tr th:each="q, loop : ${paging}">
             <td>
-                <a th:text="${loop.count}" th:href="@{|/question/detail/${q.id}|}"></a>
+<!--                <a th:text="${q.id}" href=""></a>-->
+                <a th:text="${paging.totalElements}" th:href="@{|/question/detail/${q.id}|}"></a>
             </td>
             <td>
                 <a th:href="@{|/question/detail/${q.id}|}" th:text="${q.subject}"></a>
