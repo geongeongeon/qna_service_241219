@@ -60,7 +60,7 @@
         <tr th:each="q, loop : ${paging}">
             <td>
 <!--                <a th:text="${q.id}" href=""></a>-->
-                <a th:text="${paging.totalElements - loop.index}" th:href="@{|/question/detail/${q.id}|}"></a>
+                <a th:text="${paging.totalElements - loop.index - (paging.number * paging.size)}" th:href="@{|/question/detail/${q.id}|}"></a>
             </td>
             <td>
                 <a th:href="@{|/question/detail/${q.id}|}" th:text="${q.subject}"></a>
