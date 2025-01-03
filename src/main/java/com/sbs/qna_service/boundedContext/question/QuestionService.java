@@ -3,6 +3,9 @@ package com.sbs.qna_service.boundedContext.question;
 import com.sbs.qna_service.boundedContext.answer.AnswerRepository;
 import com.sbs.qna_service.exception.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,5 +38,11 @@ public class QuestionService {
         questionRepository.save(q);
 
         return q;
+    }
+
+    public Page<Question> getList(int page) {
+        // Pageable : 페이징 정보를 담는 객체
+        Pageable pageable = PageRequest.of(page, 10); // 한 페이지에 10개씩
+        return questionRepository.findAll(pageable);
     }
 }

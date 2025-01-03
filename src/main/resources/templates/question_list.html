@@ -3,6 +3,53 @@
 <div layout:fragment="content" class="container my-3">
     <table class="table">
         <thead class="table-dark">
+            <tr>
+                <td>속성</td>
+                <td>설명</td>
+                <td>값</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>paging.isEmpty</th>
+                <td>페이지 존재 여부 (게시물이 있으면 false, 없으면 true)</td>
+                <td>[[${paging.isEmpty}]]</td>
+            </tr>
+            <tr>
+                <th>paging.totalElements</th>
+                <td>전체 게시물 개수</td>
+                <td th:text="${paging.totalElements}"></td>
+            </tr>
+            <tr>
+                <th>paging.totalPages</th>
+                <td>전체 페이지 개수</td>
+                <td th:text="${paging.totalPages}"></td>
+            </tr>
+            <tr>
+                <th>paging.size</th>
+                <td>페이지당 보여 줄 게시물 개수</td>
+                <td th:text="${paging.size}"></td>
+            </tr>
+            <tr>
+                <th>paging.number</th>
+                <td>현재 페이지 번호 (0부터 시작)</td>
+                <td th:text="${paging.number}"></td>
+            </tr>
+            <tr>
+                <th>paging.hasPrevious</th>
+                <td>이전 페이지의 존재 여부 (존재하면 true, 존재하지 않으면 false)</td>
+                <td th:text="${paging.hasPrevious}"></td>
+            </tr>
+            <tr>
+                <th>paging.hasNext</th>
+                <td>다음 페이지의 존재 여부 (존재하면 true, 존재하지 않으면 false)</td>
+                <td th:text="${paging.hasNext}"></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table class="table">
+        <thead class="table-dark">
         <tr>
             <th>번호</th>
             <th>제목</th>
@@ -10,7 +57,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="q, loop : ${questionList}">
+        <tr th:each="q, loop : ${paging}">
             <td>
                 <a th:text="${loop.count}" th:href="@{|/question/detail/${q.id}|}"></a>
             </td>
