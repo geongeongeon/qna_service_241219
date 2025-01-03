@@ -37,7 +37,8 @@ public class QuestionController {
     }
 
     @GetMapping("/create")
-    public String questionCreate(QuestionForm questionForm) {
+    public String questionCreate(Model model) {
+        model.addAttribute("questionForm", new QuestionForm());
         return "question_form";
     }
 
