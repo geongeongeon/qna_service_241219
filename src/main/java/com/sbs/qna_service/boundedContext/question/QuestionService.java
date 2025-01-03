@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +43,14 @@ public class QuestionService {
     }
 
     public Page<Question> getList(int page) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate")); // 작성일자 순으로 정렬
+
         // Pageable : 페이징 정보를 담는 객체
-        Pageable pageable = PageRequest.of(page, 10); // 한 페이지에 10개씩
+        // page : 요청된 페이지 번호 (0부터 시작)
+        // 10 : 한 페이지에 표시할 데이터 개수
+        // Sort.by(sorts) : 정렬 기준, 'createDate'를 기준으로 정렬
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts)); // 한 페이지에 10개씩
         return questionRepository.findAll(pageable);
     }
 }
