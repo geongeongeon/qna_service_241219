@@ -8,11 +8,11 @@
         </div>
         <div class="mb-3">
             <label for="subject" class="form-label">제목</label>
-            <input type="text" name="subject" id="subject" class="form-control" th:value="${questionForm.subject}">
+            <input type="text" class="form-control" th:field="*{subject}">
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
-            <textarea name="content" id="content" class="form-control" rows="10" th:text="${questionForm.content}"></textarea>
+            <textarea class="form-control" rows="10" th:field="*{content}"></textarea>
         </div>
         <input type="submit" value="저장하기" class="btn btn-primary my-2">
     </form>
