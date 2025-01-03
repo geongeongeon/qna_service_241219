@@ -69,7 +69,7 @@
         </tbody>
     </table>
 
-    <nav>
+    <nav th:if="${!paging.isEmpty}">
         <ul class="pagination justify-content-center">
             <li class="page-item"><a class="page-link" href="#">이전</a></li>
             <li class="page-item"><a class="page-link" href="#">1</a></li>
