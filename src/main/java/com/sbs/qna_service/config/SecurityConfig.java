@@ -35,11 +35,19 @@ public class SecurityConfig {
                         // 시큐리티에게 우리가 만든 로그인 페이지의 url을 알려줌
                         // 만약에 하지 않으면 기본 로그인 페이지의 url은 /login
                         .loginPage("/user/login") // 로그인 폼으로 이동
-                        
+
                         // POST
                         // 시큐리티에게 로그인 폼 처리 url을 알려줌
                         .loginProcessingUrl("/user/login") // 로그인 처리 시 요청 경로
                         .defaultSuccessUrl("/")) // 로그인 성공 시 리다이렉트 경로
+
+                .logout((logout) -> logout
+                        // GET
+//                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                        // POST
+                        .logoutUrl("/user/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)) // 세션 무효화
         ;
         return http.build();
     }
