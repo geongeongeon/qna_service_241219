@@ -1,6 +1,7 @@
 package com.sbs.qna_service.boundedContext.question;
 
 import com.sbs.qna_service.boundedContext.answer.Answer;
+import com.sbs.qna_service.boundedContext.user.SiteUser;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,9 @@ public class Question {
     private String content;
 
     private LocalDateTime createDate; // DATETIME
+
+    @ManyToOne
+    private SiteUser author;
 
     // OneToMany : 자바 상에서 편의를 위해 필드 생성 -> DB 테이블에 칼럼이 생성되지 않음
     /*

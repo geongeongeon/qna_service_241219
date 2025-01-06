@@ -2,9 +2,11 @@ package com.sbs.qna_service;
 
 import com.sbs.qna_service.boundedContext.answer.Answer;
 import com.sbs.qna_service.boundedContext.answer.AnswerRepository;
+import com.sbs.qna_service.boundedContext.answer.AnswerService;
 import com.sbs.qna_service.boundedContext.question.Question;
 import com.sbs.qna_service.boundedContext.question.QuestionRepository;
 import com.sbs.qna_service.boundedContext.question.QuestionService;
+import com.sbs.qna_service.boundedContext.user.SiteUser;
 import com.sbs.qna_service.boundedContext.user.UserRepository;
 import com.sbs.qna_service.boundedContext.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
@@ -31,6 +32,9 @@ class QnaServiceApplicationTests {
 
 	@Autowired
 	private QuestionService questionService;
+
+	@Autowired
+	private AnswerService answerService;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -60,40 +64,24 @@ class QnaServiceApplicationTests {
 		userRepository.clearAutoIncrement();
 
 		// 회원 2명 생성
-		userService.create("user1", "user1@test.com", "1234");
-		userService.create("user2", "user2" +
-				"@test.com", "1234");
+		SiteUser user1 = userService.create("user1", "user1@test.com", "1234");
+		SiteUser user2 = userService.create("user2", "user2@test.com", "1234");
 
-		Question q1 = new Question();
-		q1.setSubject("sbb가 무엇인가요?");
-		q1.setContent("sbb에 대해서 알고 싶습니다.");
-		q1.setCreateDate(LocalDateTime.now());
-		questionRepository.save(q1);  // 첫번째 질문 저장
+		// 질문 2개 생성
+		Question q1 = questionService.create("sbb가 무엇인가요?", "sbb에 대해서 알고 싶습니다.", user1);
+		Question q2 = questionService.create("스프링부트 모델 질문입니다.", "id는 자동으로 생성되나요?", user2);
 
-		Question q2 = new Question();
-		q2.setSubject("스프링부트 모델 질문입니다.");
-		q2.setContent("id는 자동으로 생성되나요?");
-		q2.setCreateDate(LocalDateTime.now());
-		questionRepository.save(q2);  // 두번째 질문 저장
-
-		// 답변 1개 생성하기
-		Answer a1 = new Answer();
-		a1.setContent("네 자동으로 생성됩니다.");
-		q2.addAnswer(a1); // 질문과 답변을 한 로직을 통해서 처리
-		a1.setCreateDate(LocalDateTime.now());
-		answerRepository.save(a1);
+		// 답변 1개 생성
+		Answer a1 = answerService.create(q2,"네 자동으로 생성됩니다.", user2);
 	}
 
 	@Test
 	// DisplayName : 테스트의 의도를 사람이 읽기 쉬운 형태로 설명
 	@DisplayName("데이터 저장하기")
 	void t001() {
-		Question q = new Question();
-		q.setSubject("겨울 제철 음식으로는 무엇을 먹어야 하나요?");
-		q.setContent("겨울 제철 음식을 알려주세요.");
-		q.setCreateDate(LocalDateTime.now());
-		// save : INSERT 쿼리 실행
-		questionRepository.save(q);  // 세번째 질문 저장
+		// SELECT * FROM site)user WHERE username = 'user1';
+		SiteUser user1 = userService.getUser("user1");
+		Question q = questionService.create("겨울 제철 음식으로는 무엇을 먹어야 하나요?", "겨울 제철 음식을 알려주세요.", user1);
 
 		assertEquals("겨울 제철 음식으로는 무엇을 먹어야 하나요?", questionRepository.findById(3).get().getSubject());
 	}
@@ -178,6 +166,8 @@ class QnaServiceApplicationTests {
 	// SQL : INSERT INTO answer SET create_date = NOW(), content = ?, question_id = ?;
 	@Test
 	@DisplayName("답변 데이터 생성 후 저장")
+	@Transactional
+	@Rollback(false)
 	void t009() {
 		Optional<Question> oq = questionRepository.findById(2);
 		assertTrue(oq.isPresent());
@@ -192,11 +182,10 @@ class QnaServiceApplicationTests {
 			 Question q = questionRepository.findById(2).orElse(null);
 		*/
 
-		Answer a = new Answer();
-		a.setContent("네 자동으로 생성됩니다.");
-		a.setQuestion(q);  // 어떤 질문의 답변인지 알기위해서 Question 객체가 필요하다.
-		a.setCreateDate(LocalDateTime.now());
-		answerRepository.save(a);
+		SiteUser user2 = userService.getUser("user2");
+		Answer a = answerService.create(q, "네 자동으로 생성됩니다.", user2);
+
+		assertEquals("네 자동으로 생성됩니다.", a.getContent());
 	}
 
 	// SQL : SELECT A.*, Q.* FROM answer AS A LEFT JOIN question AS Q on Q.id = A.question_id WHERE A.id = ?;
@@ -234,9 +223,11 @@ class QnaServiceApplicationTests {
 	@Test
 	@DisplayName("대량의 테스트 데이터 만들기")
 	void t012() {
+		SiteUser user2 = userService.getUser("user2");
+
 		IntStream.rangeClosed(3, 300)
 				.forEach(
-						no -> questionService.create("테스트 제목입니다.%d".formatted(no), "테스트 내용입니다.%d".formatted(no))
+						no -> questionService.create("테스트 제목입니다.%d".formatted(no), "테스트 내용입니다.%d".formatted(no), user2)
 						);
 	}
 }
