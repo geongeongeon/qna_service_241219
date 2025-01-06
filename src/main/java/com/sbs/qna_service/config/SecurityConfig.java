@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -16,10 +17,27 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-//                .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-//                        .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()) // 해당 경로는 인증없이 접근 가능
+                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                        .requestMatchers(new AntPathRequestMatcher("/question/list")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/question/detail/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/signup")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/user/login")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/style.css")).permitAll()
+                        .anyRequest().authenticated() // 그 외의 요청은 인증이 필요
+                ) // 해당 경로는 인증없이 접근 가능
+
                 .formLogin((formLogin) -> formLogin
+//                        .usernameParameter("name") // 아이디 필드 이름 변경
+//                        .passwordParameter("pw") // 비밀번호 필드 이름 변경
+
+                        // GET
+                        // 시큐리티에게 우리가 만든 로그인 페이지의 url을 알려줌
+                        // 만약에 하지 않으면 기본 로그인 페이지의 url은 /login
                         .loginPage("/user/login") // 로그인 폼으로 이동
+                        
+                        // POST
+                        // 시큐리티에게 로그인 폼 처리 url을 알려줌
                         .loginProcessingUrl("/user/login") // 로그인 처리 시 요청 경로
                         .defaultSuccessUrl("/")) // 로그인 성공 시 리다이렉트 경로
         ;
