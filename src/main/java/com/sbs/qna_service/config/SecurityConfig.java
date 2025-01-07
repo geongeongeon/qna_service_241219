@@ -10,16 +10,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true) // 메서드 보안 활성화
 public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
+                /*.authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(new AntPathRequestMatcher("/question/list")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/question/detail/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/user/signup")).permitAll()
@@ -27,9 +26,9 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/style.css")).permitAll()
                         .anyRequest().authenticated() // 그 외의 요청은 인증이 필요
-                ) // 해당 경로는 인증없이 접근 가능
+                ) // 해당 경로는 인증없이 접근 가능*/
 
-                .formLogin((formLogin) -> formLogin
+                .formLogin(formLogin -> formLogin
 //                        .usernameParameter("name") // 아이디 필드 이름 변경
 //                        .passwordParameter("pw") // 비밀번호 필드 이름 변경
 
@@ -43,7 +42,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/user/login") // 로그인 처리 시 요청 경로
                         .defaultSuccessUrl("/")) // 로그인 성공 시 리다이렉트 경로
 
-                .logout((logout) -> logout
+                .logout(logout -> logout
                         // GET
 //                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                         // POST

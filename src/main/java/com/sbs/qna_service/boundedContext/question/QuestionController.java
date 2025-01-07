@@ -45,11 +45,15 @@ public class QuestionController {
         return "question_form";
     }
 
+    // isAuthenticated() : 인증된 사용자만 접근 가능
+    // @PreAuthorize("hasRole('ADMIN')") : 어드민만 접근 가능
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     // @Valid QuestionForm questionForm
     // questionForm 값을 바인딩 할 때 유효성 체크를 해라!
     public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult, Principal principal) {
+        SiteUser siteUser = userService.getUser(principal.getName());
+
         // Principal : 현재 인증된 사용자의 정보를 나타냄
         if (bindingResult.hasErrors()) { // hasErrors : 에러가 존재한다면 true, 존재하지 않다면 false
             // question_form.html 실행
@@ -57,7 +61,6 @@ public class QuestionController {
             return "question_form";
         }
 
-        SiteUser siteUser = userService.getUser(principal.getName());
         questionService.create(questionForm.getSubject(), questionForm.getContent(), siteUser);
 
         return "redirect:/question/list"; // 질문 저장 후 질문 목록으로 이동
