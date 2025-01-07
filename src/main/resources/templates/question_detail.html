@@ -57,6 +57,12 @@
                     <div th:text="${#temporals.format(answer.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
+            <a onclick="return confirm('추천하시겠습니까?');" class="recommend btn btn-sm btn-outline-secondary"
+               th:href="@{|/answer/vote/${answer.id}|}">
+                추천
+                <span class="badge rounded-pill bg-success" th:text="${#lists.size(answer.voters)}"></span>
+            </a>
+
             <div class="my-3">
                 <a th:href="@{|/answer/modify/${answer.id}|}" class="btn btn-sm btn-outline-secondary"
                    sec:authorize="isAuthenticated()"
