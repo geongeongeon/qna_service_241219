@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,7 +31,15 @@ public class Answer {
     @ManyToOne
     private SiteUser author;
 
+    @ManyToMany
+    // Set 자료형은 중복된 값을 무시
+    private Set<SiteUser> voters  = new LinkedHashSet<>();
+
     @ManyToOne
     @ToString.Exclude
     private Question question; // question_id 생성
+
+    public void addVoter(SiteUser voter) {
+        voters.add(voter);
+    }
 }

@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -33,6 +35,10 @@ public class Question {
     @ManyToOne
     private SiteUser author;
 
+    @ManyToMany
+    // Set 자료형은 중복된 값을 무시
+    private Set<SiteUser> voters  = new LinkedHashSet<>();
+
     // OneToMany : 자바 상에서 편의를 위해 필드 생성 -> DB 테이블에 칼럼이 생성되지 않음
     /*
         DB는 리스트나 배열을 만들 수 없다.
@@ -48,5 +54,9 @@ public class Question {
     public void addAnswer(Answer a) {
         a.setQuestion(this); // Question 객체에 Answer 추가
         answerList.add(a); // Answer 객체에 Question 설정
+    }
+
+    public void addVoter(SiteUser voter) {
+        voters.add(voter);
     }
 }
