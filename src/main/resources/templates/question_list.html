@@ -89,20 +89,20 @@
         </tbody>
     </table>
 
-    <nav th:if="${!paging.isEmpty}">
+    <nav th:if="${!paging.isEmpty}" th:with="queryStrBase = '?kw=' + ${param.kw != null ? param.kw : ''}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-                <a th:href="@{|?page=${paging.number - 1}|}" class="page-link">
+                <a th:href="@{|${queryStrBase}&page=0|}" class="page-link">
                     <span>&laquo;</span>
                 </a>
             </li>
             <li th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}" class="page-item"
                 th:if="${page >= paging.number - 5 and page <= paging.number + 5}"
                 th:classappend="${page == paging.number} ? 'active'">
-                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                <a th:text="${page}" class="page-link" th:href="@{|${queryStrBase}&page=${page}|}"></a>
             </li>
             <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-                <a th:href="@{|?page=${paging.number + 1}|}" class="page-link">
+                <a th:href="@{|${queryStrBase}&page=${paging.totalPages - 1}|}" class="page-link">
                     <span>&raquo;</span>
                 </a>
             </li>
